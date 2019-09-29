@@ -1,5 +1,7 @@
 ﻿@page "/fetchdata"
-@inject HttpClient Http
+@using BlazorSandbox.App.Services
+@using BlazorSandbox.App.Models
+@inject IWeatherService WeatherService
 
 <h1>Weather forecast</h1>
 
@@ -35,21 +37,11 @@ else
 }
 
 @code {
-    WeatherForecast[] forecasts;
+    List<WeatherForecast> forecasts;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        forecasts = await Http.GetJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-    }
-
-    public class WeatherForecast
-    {
-        public DateTime Date { get; set; }
-
-        public int TemperatureC { get; set; }
-
-        public string Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        forecasts =  WeatherService.GetForecasts();
+        //forecasts = await Http.GetJsonAsync<List<WeatherForecast>>("sample-data/weather.json");
     }
 }
